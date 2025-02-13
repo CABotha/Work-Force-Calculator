@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Future Workforce Forecasting</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.1/jspdf.plugin.autotable.min.js"></script>
+</head>
+<body>
+    <div class="dashboard">
+        <!-- Sidebar with Logo and Navigation -->
+        <aside class="sidebar">
+            <div class="logo-container">
+                <img src="company-logo.png" alt="Company Logo" class="logo">
+            </div>
+            <nav class="nav-menu">
+                <a href="#" class="nav-item active" data-tab="calculator">Calculator</a>
+                <a href="#" class="nav-item" data-tab="instructions">Instructions</a>
+            </nav>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Instructions Tab -->
+            <div id="instructionsTab" class="content-tab" style="display: none;">
+                <div class="instructions-container">
+                    <h2>How to Use the Workforce Calculator</h2>
+                    
+                    <section class="instruction-section">
+                        <h3>Step 1: Enter Growth Factors</h3>
+                        <ul>
+                            <li>Select values for each management level using the dropdowns</li>
+                            <li>Values will automatically update the Compound Impact Factor</li>
+                            <li>Ensure values are within the specified ranges</li>
+                        </ul>
+                    </section>
+
+                    <section class="instruction-section">
+                        <h3>Step 2: Enter Current Headcount</h3>
+                        <ul>
+                            <li>Input the current headcount for each level</li>
+                            <li>Use whole numbers only</li>
+                            <li>All fields must be filled</li>
+                        </ul>
+                    </section>
+
+                    <section class="instruction-section">
+                        <h3>Step 3: Calculate Forecast</h3>
+                        <ul>
+                            <li>Click the 'Calculate Forecast' button</li>
+                            <li>Review the calculated projections</li>
+                            <li>Make adjustments if needed and recalculate</li>
+                        </ul>
+                    </section>
+
+                    <section class="instruction-section">
+                        <h3>Step 4: Export Results</h3>
+                        <ul>
+                            <li>Export buttons will be enabled after calculation</li>
+                            <li>Excel export includes detailed worksheets</li>
+                            <li>PDF export provides a formatted report</li>
+                        </ul>
+                    </section>
+
+                    <section class="instruction-section">
+                        <h3>Understanding Growth Factors</h3>
+                        <div class="factors-guide">
+                            <div class="factor">
+                                <h4>Economic Factor (-0.2 to +0.2)</h4>
+                                <ul>
+                                    <li>Positive: Growing economy</li>
+                                    <li>Zero: Stable economy</li>
+                                    <li>Negative: Economic downturn</li>
+                                </ul>
+                            </div>
+
+                            <div class="factor">
+                                <h4>AI/Automation Factor (-0.3 to +0.1)</h4>
+                                <ul>
+                                    <li>Typically negative due to automation</li>
+                                    <li>Can be positive if AI creates more jobs</li>
+                                </ul>
+                            </div>
+
+                            <div class="factor">
+                                <h4>Work Transformation (-0.2 to +0.2)</h4>
+                                <ul>
+                                    <li>Positive: Digital transformation creating jobs</li>
+                                    <li>Negative: Consolidation reducing positions</li>
+                                </ul>
+                            </div>
+
+                            <div class="factor">
+                                <h4>Retention Factor (0.7 to 1.2)</h4>
+                                <ul>
+                                    <li>Below 1: High turnover</li>
+                                    <li>Above 1: Strong retention</li>
+                                    <li>1.0: Normal retention</li>
+                                </ul>
+                            </div>
+
+                            <div class="factor">
+                                <h4>Skills Factor (0.8 to 1.3)</h4>
+                                <ul>
+                                    <li>Below 1: Skills Gap limiting Growth</li>
+                                    <li>Above 1: Strong skills availability</li>
+                                    <li>1.0: Balanced skills market</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+
+            <!-- Calculator Tab -->
+            <div id="calculatorTab" class="content-tab">
+                <!-- Title Section -->
+                <div class="title-section">
+                    <h1>FUTURE WORKFORCE FORECASTING</h1>
+                    <div class="actions">
+                        <button id="calculateBtn" class="btn btn-primary">Calculate Forecast</button>
+                        <button id="exportExcel" class="btn btn-secondary" disabled>Export to Excel</button>
+                        <button id="exportPdf" class="btn btn-secondary" disabled>Export to PDF</button>
+                    </div>
+                </div>
+
+                <!-- Warning Message -->
+                <div id="calculateWarning" class="warning-message">
+                    Please calculate the forecast before exporting results.
+                </div>
+
+                <!-- Instruction Banner -->
+                <div class="instruction-banner">
+                    Select values from the dropdowns below for each factor and management level.
+                </div>
+
+                <!-- Factors Table -->
+                <table class="factors-table">
+                    <thead>
+                        <tr>
+                            <th class="level-col">Level</th>
+                            <th>Compound Impact Factor</th>
+                            <th>Economic Factor</th>
+                            <th>AI/Automation Factor:</th>
+                            <th>Work Transformation Factor</th>
+                            <th>Retention Factor</th>
+                            <th>Skills Factor</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Will be populated by JavaScript -->
+                    </tbody>
+                </table>
+
+                <!-- Second Instruction Banner -->
+                <div class="instruction-banner">
+                    Enter Current Head count only.
+                </div>
+
+                <!-- Results Table -->
+                <table class="results-table">
+                    <thead>
+                        <tr>
+                            <th class="level-col">Level</th>
+                            <th>Enter: Current Head count</th>
+                            <th>Head Count 2026</th>
+                            <th>Head Count 2027</th>
+                            <th>Head Count 2028</th>
+                            <th>Head Count 2029</th>
+                            <th>Head Count 2030</th>
+                        </tr>
+                    </thead>
+                    <tbody id="forecastResults">
+                        <!-- Will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
