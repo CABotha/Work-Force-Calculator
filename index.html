@@ -4,183 +4,862 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Future Workforce Forecasting</title>
-    <link rel="stylesheet" href="styles.css">
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js"></script>
+    <!-- Excel and PDF Export Libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.1/jspdf.plugin.autotable.min.js"></script>
+    <style>
+        /* Base Styles */
+        :root {
+            --header-blue: #4472C4;
+            --cell-blue: #B8CCE4;
+            --light-blue: #DCE6F1;
+            --instruction-pink: #FCE4D6;
+            --border-color: #7F7F7F;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: Calibri, Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--light-blue);
+        }
+
+        /* Auth Container Styles */
+        .auth-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .auth-box {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        /* Main App Styles */
+        .app-container {
+            display: none;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 1rem;
+            background: var(--white);
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo {
+            height: 50px;
+            width: auto;
+        }
+
+        .title {
+            font-size: 1.5rem;
+            color: var(--header-blue);
+            font-weight: bold;
+        }
+
+        .user-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-email {
+            color: var(--header-blue);
+            font-weight: 500;
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+
+        input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--header-blue);
+            box-shadow: 0 0 0 2px rgba(68, 114, 196, 0.1);
+        }
+
+        /* Button Styles */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.875rem;
+            transition: background-color 0.2s;
+        }
+
+        .btn-primary {
+            background-color: var(--header-blue);
+            color: white;
+        }
+
+        .btn-secondary {
+            background-color: var(--cell-blue);
+            color: #333;
+        }
+
+        .btn-logout {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        /* Table Styles */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+        }
+
+        th {
+            background-color: var(--header-blue);
+            color: white;
+            font-weight: normal;
+        }
+
+        td {
+            background-color: var(--light-blue);
+        }
+        
+
+        .level-col {
+            width: 300px;
+        }
+
+
+
+        /* Instruction Banner */
+        .instruction-banner {
+            background-color: var(--instruction-pink);
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+            border: 1px solid #F4B084;
+        }
+
+        /* Auth Links */
+        .auth-links {
+            margin-top: 1rem;
+            text-align: center;
+        }
+
+        .auth-links a {
+            color: var(--header-blue);
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .auth-links a:hover {
+            text-decoration: underline;
+        }
+
+        /* Error Message */
+        .error-message {
+            color: #dc3545;
+            margin-top: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
+
+            .user-section {
+                flex-direction: column;
+            }
+
+            table {
+                display: block;
+                overflow-x: auto;
+            }
+
+            .level-col {
+                min-width: 200px;
+            }
+        }
+
+        /* Factor Select Styles */
+        .factor-select {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            background-color: white;
+        }
+
+        .factor-select:focus {
+            outline: none;
+            border-color: var(--header-blue);
+            box-shadow: 0 0 0 2px rgba(68, 114, 196, 0.1);
+        }
+
+        /* Compound Cell Style */
+        .compound-cell {
+            background-color: var(--cell-blue) !important;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        /* Print Styles */
+        @media print {
+            .auth-container, .actions, .instruction-banner {
+                display: none;
+            }
+
+            .app-container {
+                padding: 0;
+            }
+
+            table {
+                box-shadow: none;
+            }
+        }
+    </style>
 </head>
 <body>
-    <div class="dashboard">
-        <!-- Sidebar with Logo and Navigation -->
-        <aside class="sidebar">
-            <div class="logo-container">
-                <img src="company-logo.png" alt="Company Logo" class="logo">
+    <!-- Login Container -->
+<div id="authContainer" class="auth-container">
+    <div class="auth-box">
+        <div id="loginForm">
+            <h2>Login to Workforce Calculator</h2>
+            <div class="form-group">
+                <label for="loginEmail">Email</label>
+                <input type="email" id="loginEmail" required>
             </div>
-            <nav class="nav-menu">
-                <a href="#" class="nav-item active" data-tab="calculator">Calculator</a>
-                <a href="#" class="nav-item" data-tab="instructions">Instructions</a>
-            </nav>
-        </aside>
-
-        <!-- Main Content Area -->
-        <main class="main-content">
-            <!-- Instructions Tab -->
-            <div id="instructionsTab" class="content-tab" style="display: none;">
-                <div class="instructions-container">
-                    <h2>How to Use the Workforce Calculator</h2>
-                    
-                    <section class="instruction-section">
-                        <h3>Step 1: Enter Growth Factors</h3>
-                        <ul>
-                            <li>Select values for each management level using the dropdowns</li>
-                            <li>Values will automatically update the Compound Impact Factor</li>
-                            <li>Ensure values are within the specified ranges</li>
-                        </ul>
-                    </section>
-
-                    <section class="instruction-section">
-                        <h3>Step 2: Enter Current Headcount</h3>
-                        <ul>
-                            <li>Input the current headcount for each level</li>
-                            <li>Use whole numbers only</li>
-                            <li>All fields must be filled</li>
-                        </ul>
-                    </section>
-
-                    <section class="instruction-section">
-                        <h3>Step 3: Calculate Forecast</h3>
-                        <ul>
-                            <li>Click the 'Calculate Forecast' button</li>
-                            <li>Review the calculated projections</li>
-                            <li>Make adjustments if needed and recalculate</li>
-                        </ul>
-                    </section>
-
-                    <section class="instruction-section">
-                        <h3>Step 4: Export Results</h3>
-                        <ul>
-                            <li>Export buttons will be enabled after calculation</li>
-                            <li>Excel export includes detailed worksheets</li>
-                            <li>PDF export provides a formatted report</li>
-                        </ul>
-                    </section>
-
-                    <section class="instruction-section">
-                        <h3>Understanding Growth Factors</h3>
-                        <div class="factors-guide">
-                            <div class="factor">
-                                <h4>Economic Factor (-0.2 to +0.2)</h4>
-                                <ul>
-                                    <li>Positive: Growing economy</li>
-                                    <li>Zero: Stable economy</li>
-                                    <li>Negative: Economic downturn</li>
-                                </ul>
-                            </div>
-
-                            <div class="factor">
-                                <h4>AI/Automation Factor (-0.3 to +0.1)</h4>
-                                <ul>
-                                    <li>Typically negative due to automation</li>
-                                    <li>Can be positive if AI creates more jobs</li>
-                                </ul>
-                            </div>
-
-                            <div class="factor">
-                                <h4>Work Transformation (-0.2 to +0.2)</h4>
-                                <ul>
-                                    <li>Positive: Digital transformation creating jobs</li>
-                                    <li>Negative: Consolidation reducing positions</li>
-                                </ul>
-                            </div>
-
-                            <div class="factor">
-                                <h4>Retention Factor (0.7 to 1.2)</h4>
-                                <ul>
-                                    <li>Below 1: High turnover</li>
-                                    <li>Above 1: Strong retention</li>
-                                    <li>1.0: Normal retention</li>
-                                </ul>
-                            </div>
-
-                            <div class="factor">
-                                <h4>Skills Factor (0.8 to 1.3)</h4>
-                                <ul>
-                                    <li>Below 1: Skills Gap limiting Growth</li>
-                                    <li>Above 1: Strong skills availability</li>
-                                    <li>1.0: Balanced skills market</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </section>
+            <div class="form-group">
+                <label for="loginPassword">Password</label>
+                <input type="password" id="loginPassword" required>
+            </div>
+            <button onclick="login()" class="btn btn-primary">Login</button>
+            <div class="auth-links">
+                <p><a onclick="resetPassword()">Forgot Password?</a></p>
+                <div class="subscription-info">
+                    <p style="margin-top: 20px; color: #4472C4; font-weight: bold;">Need Access?</p>
+                    <p style="margin-top: 10px;">To purchase a subscription, please contact:</p>
+                    <a href="mailto:courtenay@globalbusiness.co.za" style="color: #4472C4; text-decoration: none; font-weight: bold;">
+                        courtenay@globalbusiness.co.za
+                    </a>
                 </div>
             </div>
-
-            <!-- Calculator Tab -->
-            <div id="calculatorTab" class="content-tab">
-                <!-- Title Section -->
-                <div class="title-section">
-                    <h1>FUTURE WORKFORCE FORECASTING</h1>
-                    <div class="actions">
-                        <button id="calculateBtn" class="btn btn-primary">Calculate Forecast</button>
-                        <button id="exportExcel" class="btn btn-secondary" disabled>Export to Excel</button>
-                        <button id="exportPdf" class="btn btn-secondary" disabled>Export to PDF</button>
-                    </div>
-                </div>
-
-                <!-- Warning Message -->
-                <div id="calculateWarning" class="warning-message">
-                    Please calculate the forecast before exporting results.
-                </div>
-
-                <!-- Instruction Banner -->
-                <div class="instruction-banner">
-                    Select values from the dropdowns below for each factor and management level.
-                </div>
-
-                <!-- Factors Table -->
-                <table class="factors-table">
-                    <thead>
-                        <tr>
-                            <th class="level-col">Level</th>
-                            <th>Compound Impact Factor</th>
-                            <th>Economic Factor</th>
-                            <th>AI/Automation Factor:</th>
-                            <th>Work Transformation Factor</th>
-                            <th>Retention Factor</th>
-                            <th>Skills Factor</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- Will be populated by JavaScript -->
-                    </tbody>
-                </table>
-
-                <!-- Second Instruction Banner -->
-                <div class="instruction-banner">
-                    Enter Current Head count only.
-                </div>
-
-                <!-- Results Table -->
-                <table class="results-table">
-                    <thead>
-                        <tr>
-                            <th class="level-col">Level</th>
-                            <th>Enter: Current Head count</th>
-                            <th>Head Count 2026</th>
-                            <th>Head Count 2027</th>
-                            <th>Head Count 2028</th>
-                            <th>Head Count 2029</th>
-                            <th>Head Count 2030</th>
-                        </tr>
-                    </thead>
-                    <tbody id="forecastResults">
-                        <!-- Will be populated by JavaScript -->
-                    </tbody>
-                </table>
-            </div>
-        </main>
+            <p id="authError" class="error-message"></p>
+        </div>
     </div>
+</div>
 
-    <script src="script.js"></script>
+    <!-- Main App Container -->
+    <div id="appContainer" class="app-container">
+        <div class="header">
+            <div class="logo-section">
+                <img src="company-logo.png" alt="Company Logo" class="logo">
+                <h1 class="title">FUTURE WORKFORCE FORECASTING</h1>
+            </div>
+            <div class="user-section">
+                <span id="userEmail" class="user-email"></span>
+                <button onclick="logout()" class="btn btn-logout">Logout</button>
+            </div>
+        </div>
+
+        <div class="actions">
+            <button id="calculateBtn" class="btn btn-primary">Calculate Forecast</button>
+            <button id="exportExcel" class="btn btn-secondary" disabled>Export to Excel</button>
+            <button id="exportPdf" class="btn btn-secondary" disabled>Export to PDF</button>
+        </div>
+
+        <div class="instruction-banner">
+            Enter below using drop downs: Economic Factor, AI/Automation Factor, Workforce Transformation Factor, Retention Factor and Skills Factor for each management level.
+        </div>
+
+        <table class="factors-table">
+            <thead>
+                <tr>
+                    <th class="level-col">Level</th>
+                    <th>Compound Impact Factor</th>
+                    <th>Economic Factor</th>
+                    <th>AI/Automation Factor:</th>
+                    <th>Work Transformation Factor</th>
+                    <th>Retention Factor</th>
+                    <th>Skills Factor</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Will be populated by JavaScript -->
+            </tbody>
+        </table>
+
+        <div class="instruction-banner">
+            Enter Current Head count only.
+        </div>
+
+        <table class="results-table">
+            <thead>
+                <tr>
+                    <th class="level-col">Level</th>
+                    <th>Enter: Current Head count</th>
+                    <th>Head Count 2026</th>
+                    <th>Head Count 2027</th>
+                    <th>Head Count 2028</th>
+                    <th>Head Count 2029</th>
+                    <th>Head Count 2030</th>
+                </tr>
+            </thead>
+            <tbody id="forecastResults">
+                <!-- Will be populated by JavaScript -->
+            </tbody>
+        </table>
+    </div>
+<script>
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCAma2IgEvyfVSqlSqqkXCsTJM7jchdoCk",
+            authDomain: "workforce-calculator.firebaseapp.com",
+            projectId: "workforce-calculator",
+            storageBucket: "workforce-calculator.appspot.com",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+
+        // Configuration
+        const WORKFORCE_LEVELS = [
+            'Top Management',
+            'Senior Management',
+            'Professionally Qualified and experienced specialists and Mid-management',
+            'Skill technical and academically qualified workers, junior management, supervisors,',
+            'Semi - Skilled',
+            'Unskilled'
+        ];
+
+        const FACTOR_CONFIGS = {
+            economic: {
+                name: 'Economic Factor',
+                options: [
+                    { value: -0.2, label: '-20% Decline' },
+                    { value: -0.1, label: '-10% Moderate Decline' },
+                    { value: 0.0, label: '0% Stable' },
+                    { value: 0.1, label: '+10% Growth' },
+                    { value: 0.2, label: '+20% Growth' },
+                    { value: 0.3, label: '+30% Strong Growth' }
+                ]
+            },
+            automation: {
+                name: 'AI/Automation Factor',
+                options: [
+                    { value: -0.3, label: '-30% High Impact' },
+                    { value: -0.2, label: '-20% Significant Impact' },
+                    { value: -0.1, label: '-10% Moderate Impact' },
+                    { value: 0.0, label: '0% No Impact' },
+                    { value: 0.1, label: '+10% Positive Impact' }
+                ]
+            },
+            transformation: {
+                name: 'Work Transformation Factor',
+                options: [
+                    { value: -0.2, label: '-20% Major Reduction' },
+                    { value: -0.1, label: '-10% Minor Reduction' },
+                    { value: 0.0, label: '0% No Change' },
+                    { value: 0.1, label: '+10% Minor Growth' },
+                    { value: 0.2, label: '+20% Major Growth' }
+                ]
+            },
+            retention: {
+                name: 'Retention Factor',
+                options: [
+                    { value: 0.7, label: '70% High Turnover' },
+                    { value: 0.8, label: '80% Above Average Turnover' },
+                    { value: 0.9, label: '90% Normal Turnover' },
+                    { value: 1.0, label: '100% Stable' },
+                    { value: 1.1, label: '110% Good Retention' },
+                    { value: 1.2, label: '120% Strong Retention' }
+                ]
+            },
+            skills: {
+                name: 'Skills Factor',
+                options: [
+                    { value: 0.8, label: '80% Significant Gap' },
+                    { value: 0.9, label: '90% Minor Gap' },
+                    { value: 1.0, label: '100% Balanced' },
+                    { value: 1.1, label: '110% Good Availability' },
+                    { value: 1.2, label: '120% Strong Availability' },
+                    { value: 1.3, label: '130% Excellent Availability' }
+                ]
+            }
+        };
+
+        // Default values
+        const DEFAULT_VALUES = {
+            normal: {
+                economic: -0.1,
+                automation: -0.1,
+                transformation: 0.1,
+                retention: 0.9,
+                skills: 0.9
+            },
+            semiSkilled: {
+                economic: 0.3,
+                automation: -0.1,
+                transformation: -0.2,
+                retention: 1.0,
+                skills: 1.0
+            }
+        };
+
+        // Application State
+        let state = {
+            headcounts: {},
+            factors: {},
+            results: {},
+            hasCalculated: false
+        };
+
+        // Auth state observer
+        firebase.auth().onAuthStateChanged(function(user) {
+            if (user) {
+                // User is signed in
+                document.getElementById('authContainer').style.display = 'none';
+                document.getElementById('appContainer').style.display = 'block';
+                document.getElementById('userEmail').textContent = user.email;
+                initializeApp(); // Initialize the calculator
+            } else {
+                // User is signed out
+                document.getElementById('authContainer').style.display = 'flex';
+                document.getElementById('appContainer').style.display = 'none';
+            }
+        });
+
+        // Authentication functions
+        function login() {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+
+            firebase.auth().signInWithEmailAndPassword(email, password)
+                .catch((error) => {
+                    document.getElementById('authError').textContent = error.message;
+                });
+        }
+
+        function logout() {
+            firebase.auth().signOut();
+        }
+
+        function resetPassword() {
+            const email = prompt('Enter your email address to reset your password:');
+            if (email) {
+                firebase.auth().sendPasswordResetEmail(email)
+                    .then(() => {
+                        alert('Password reset email sent. Check your inbox.');
+                    })
+                    .catch((error) => {
+                        alert(error.message);
+                    });
+            }
+        }
+
+        function toggleForm(form) {
+            document.getElementById('loginForm').style.display = form === 'login' ? 'block' : 'none';
+            document.getElementById('signupForm').style.display = form === 'signup' ? 'block' : 'none';
+            document.getElementById('authError').textContent = '';
+        }
+
+        // Initialize the calculator application
+        function initializeApp() {
+            initializeState();
+            createFactorsTable();
+            createResultsTable();
+            setupEventListeners();
+            updateExportButtons();
+        }
+
+        // Initialize state with default values
+        function initializeState() {
+            WORKFORCE_LEVELS.forEach(level => {
+                state.headcounts[level] = 97;
+                state.factors[level] = level === 'Semi - Skilled' 
+                    ? { ...DEFAULT_VALUES.semiSkilled }
+                    : { ...DEFAULT_VALUES.normal };
+            });
+        }
+
+        // Create dropdown for factor selection
+        function createFactorDropdown(factorType, currentValue) {
+            const select = document.createElement('select');
+            select.className = 'factor-select';
+            
+            FACTOR_CONFIGS[factorType].options.forEach(option => {
+                const optionElement = document.createElement('option');
+                optionElement.value = option.value;
+                optionElement.textContent = option.label;
+                optionElement.selected = option.value === currentValue;
+                select.appendChild(optionElement);
+            });
+            
+            return select;
+        }
+
+        // Create factors table
+        function createFactorsTable() {
+            const tbody = document.querySelector('.factors-table tbody');
+            tbody.innerHTML = '';
+
+            WORKFORCE_LEVELS.forEach(level => {
+                const row = document.createElement('tr');
+                
+                // Level name
+                const levelCell = document.createElement('td');
+                levelCell.textContent = level;
+                row.appendChild(levelCell);
+
+                // Compound impact
+                const compoundCell = document.createElement('td');
+                compoundCell.className = 'compound-cell';
+                compoundCell.textContent = calculateCompoundImpact(level);
+                row.appendChild(compoundCell);
+
+                // Factor dropdowns
+                Object.keys(FACTOR_CONFIGS).forEach(factor => {
+                    const cell = document.createElement('td');
+                    const select = createFactorDropdown(factor, state.factors[level][factor]);
+                    select.dataset.level = level;
+                    select.dataset.factor = factor;
+                    cell.appendChild(select);
+                    row.appendChild(cell);
+                });
+
+                tbody.appendChild(row);
+            });
+        }
+
+        // Create results table
+        function createResultsTable() {
+            const tbody = document.getElementById('forecastResults');
+            tbody.innerHTML = '';
+
+            WORKFORCE_LEVELS.forEach(level => {
+                const row = document.createElement('tr');
+                
+                // Level name
+                const levelCell = document.createElement('td');
+                levelCell.textContent = level;
+                row.appendChild(levelCell);
+
+                // Current headcount input
+                const headcountCell = document.createElement('td');
+                const input = document.createElement('input');
+                input.type = 'number';
+                input.value = state.headcounts[level];
+                input.min = '0';
+                input.dataset.level = level;
+                input.className = 'headcount-input';
+                headcountCell.appendChild(input);
+                row.appendChild(headcountCell);
+
+                // Forecast placeholders
+                for (let i = 0; i < 5; i++) {
+                    const cell = document.createElement('td');
+                    cell.textContent = '-';
+                    row.appendChild(cell);
+                }
+
+                tbody.appendChild(row);
+            });
+        }
+
+        // Calculate compound impact factor
+        function calculateCompoundImpact(level) {
+            const factors = state.factors[level];
+            const impact = factors.economic + factors.automation + factors.transformation;
+            return impact.toFixed(3).replace('.', ',');
+        }
+
+        // Calculate workforce forecast
+        function calculateForecast() {
+            if (!validateInputs()) {
+                alert('Please ensure all headcount values are valid numbers.');
+                return;
+            }
+
+            WORKFORCE_LEVELS.forEach(level => {
+                const results = [state.headcounts[level]];
+                let previousYear = state.headcounts[level];
+
+                for (let year = 0; year < 5; year++) {
+                    const factors = state.factors[level];
+                    const compoundImpact = parseFloat(calculateCompoundImpact(level).replace(',', '.'));
+                    
+                    const forecast = Math.round(
+                        ((previousYear * (1 + compoundImpact)) * 
+                        factors.retention * 
+                        factors.skills) + 1
+                    );
+                    
+                    results.push(forecast);
+                    previousYear = forecast;
+                }
+
+                state.results[level] = results;
+            });
+
+            state.hasCalculated = true;
+            updateResultsDisplay();
+            updateExportButtons();
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Factor dropdown changes
+            document.querySelectorAll('.factor-select').forEach(select => {
+                select.addEventListener('change', (e) => {
+                    const level = e.target.dataset.level;
+                    const factor = e.target.dataset.factor;
+                    state.factors[level][factor] = parseFloat(e.target.value);
+                    
+                    // Update compound impact
+                    const row = e.target.closest('tr');
+                    const compoundCell = row.querySelector('.compound-cell');
+                    compoundCell.textContent = calculateCompoundImpact(level);
+
+                    // Reset calculation state
+                    state.hasCalculated = false;
+                    updateExportButtons();
+                });
+            });
+
+            // Headcount input changes
+            document.querySelectorAll('.headcount-input').forEach(input => {
+                input.addEventListener('input', (e) => {
+                    const level = e.target.dataset.level;
+                    state.headcounts[level] = parseInt(e.target.value) || 0;
+                    
+                    // Reset calculation state
+                    state.hasCalculated = false;
+                    updateExportButtons();
+                });
+            });
+
+            // Calculate button
+            document.getElementById('calculateBtn').addEventListener('click', calculateForecast);
+
+            // Export buttons
+            document.getElementById('exportExcel').addEventListener('click', exportToExcel);
+            document.getElementById('exportPdf').addEventListener('click', exportToPDF);
+        }
+
+        // Update results display
+        function updateResultsDisplay() {
+            const tbody = document.getElementById('forecastResults');
+            const rows = tbody.getElementsByTagName('tr');
+
+            WORKFORCE_LEVELS.forEach((level, index) => {
+                const cells = rows[index].getElementsByTagName('td');
+                const results = state.results[level];
+
+                // Skip first two cells (level name and headcount input)
+                for (let i = 2; i < cells.length; i++) {
+                    cells[i].textContent = results[i-1];
+                }
+            });
+        }
+
+        // Update export button states
+        function updateExportButtons() {
+            const exportButtons = document.querySelectorAll('#exportExcel, #exportPdf');
+            exportButtons.forEach(button => {
+                button.disabled = !state.hasCalculated;
+            });
+        }
+
+        // Validate inputs
+        function validateInputs() {
+            const headcountInputs = document.querySelectorAll('.headcount-input');
+            let isValid = true;
+
+            headcountInputs.forEach(input => {
+                const value = parseInt(input.value);
+                if (isNaN(value) || value < 0) {
+                    input.classList.add('invalid');
+                    isValid = false;
+                } else {
+                    input.classList.remove('invalid');
+                }
+            });
+
+            return isValid;
+        }
+
+        // Export to Excel
+        function exportToExcel() {
+            if (!state.hasCalculated) {
+                alert('Please calculate the forecast before exporting.');
+                return;
+            }
+
+            try {
+                const wb = XLSX.utils.book_new();
+                
+                // Create main worksheet
+                const factorsData = [
+                    ['FUTURE WORKFORCE FORECASTING'],
+                    [],
+                    ['Level', 'Compound Impact', 'Economic', 'AI/Automation', 'Transformation', 'Retention', 'Skills']
+                ];
+
+                WORKFORCE_LEVELS.forEach(level => {
+                    factorsData.push([
+                        level,
+                        calculateCompoundImpact(level),
+                        state.factors[level].economic,
+                        state.factors[level].automation,
+                        state.factors[level].transformation,
+                        state.factors[level].retention,
+                        state.factors[level].skills
+                    ]);
+                });
+
+                // Create results worksheet
+                const resultsData = [
+                    ['WORKFORCE FORECAST'],
+                    [],
+                    ['Level', 'Current', '2026', '2027', '2028', '2029', '2030']
+                ];
+
+                WORKFORCE_LEVELS.forEach(level => {
+                    resultsData.push([
+                        level,
+                        ...state.results[level]
+                    ]);
+                });
+
+                // Add worksheets to workbook
+                const wsFactors = XLSX.utils.aoa_to_sheet(factorsData);
+                const wsResults = XLSX.utils.aoa_to_sheet(resultsData);
+
+                XLSX.utils.book_append_sheet(wb, wsFactors, 'Growth Factors');
+                XLSX.utils.book_append_sheet(wb, wsResults, 'Workforce Forecast');
+
+                // Save file
+                XLSX.writeFile(wb, 'Workforce_Forecast.xlsx');
+            } catch (error) {
+                console.error('Export to Excel failed:', error);
+                alert('Failed to export to Excel. Please try again.');
+            }
+        }
+
+        // Export to PDF
+        function exportToPDF() {
+            if (!state.hasCalculated) {
+                alert('Please calculate the forecast before exporting.');
+                return;
+            }
+
+            try {
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF('l', 'mm', 'a4');
+
+                // Add title
+                doc.setFontSize(16);
+                doc.text('FUTURE WORKFORCE FORECASTING', 14, 20);
+                doc.setFontSize(10);
+                doc.text(`Generated: ${new Date().toLocaleDateString()}`, 14, 30);
+
+                // Add factors table
+                doc.autoTable({
+                    startY: 40,
+                    head: [['Level', 'Compound Impact', 'Economic', 'AI/Automation', 'Transformation', 'Retention', 'Skills']],
+                    body: WORKFORCE_LEVELS.map(level => [
+                        level,
+                        calculateCompoundImpact(level),
+                        state.factors[level].economic,
+                        state.factors[level].automation,
+                        state.factors[level].transformation,
+                        state.factors[level].retention,
+                        state.factors[level].skills
+                    ]),
+                    styles: { fontSize: 8 },
+                    headStyles: { fillColor: [68, 114, 196] }
+                });
+
+                // Add results table
+                doc.autoTable({
+                    startY: doc.previousAutoTable.finalY + 20,
+                    head: [['Level', 'Current', '2026', '2027', '2028', '2029', '2030']],
+                    body: WORKFORCE_LEVELS.map(level => [
+                        level,
+                        ...state.results[level]
+                    ]),
+                    styles: { fontSize: 8 },
+                    headStyles: { fillColor: [68, 114, 196] }
+                });
+
+                // Save file
+                doc.save('Workforce_Forecast.pdf');
+            } catch (error) {
+                console.error('Export to PDF failed:', error);
+                alert('Failed to export to PDF. Please try again.');
+            }
+        }
+    </script>
 </body>
 </html>
