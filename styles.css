@@ -257,9 +257,9 @@ footer strong {
     padding: 3rem 0;  /* Increased padding */
 }
 
-@media (max-width: 768px) {
+@media (max-width: 350px) {
     .header-logo {
-        height: 80px;  /* Increased mobile size */
+        height: 40px;  /* Increased mobile size */
         margin-bottom: 1rem;
     }
     
