@@ -10,13 +10,13 @@
 </head>
 <body>
     <div class="container-fluid workforce-forecast-tool">
-        <header class="row bg-primary text-white py-2 mb-3">
+        <header class="row bg-primary text-white py-4 mb-4">
             <div class="col text-center">
-                <div class="d-flex align-items-center justify-content-center mb-2">
-                    <img src="/api/placeholder/60/60" alt="Company Logo" class="header-logo me-2">
-                    <h1 class="display-5 mb-0">Workforce Forecasting Tool</h1>
+                <div class="d-flex align-items-center justify-content-center mb-3">
+                    <img src="./logo.png"> alt="Company Logo" class="header-logo me-3">
+                    <h1 class="display-4 mb-0">Workforce Forecasting Tool</h1>
                 </div>
-                <p class="lead mb-0">Strategic Workforce Planning & Prediction</p>
+                <p class="lead">Strategic Workforce Planning & Prediction</p>
             </div>
         </header>
 
@@ -127,28 +127,374 @@
                                     </select>
                                 </td>
                             </tr>
-                            <!-- Copy the same structure for Automation Impact, Work Transformation, Retention Factor, and Skills Factor as in Top Management -->
-                            <!-- Just change the data-level attribute to "senior-management" -->
+                            <tr>
+                                <td><strong>Automation Impact</strong></td>
+                                <td>
+                                    <select class="form-select level-automation-factor" data-level="senior-management">
+                                        <option value="-0.2">-0.2 (High Impact)</option>
+                                        <option value="-0.1">-0.1 (Moderate Impact)</option>
+                                        <option value="0" selected>0 (Neutral)</option>
+                                        <option value="0.1">0.1 (Positive Impact)</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>Work Transformation</strong></td>
+                                <td>
+                                    <select class="form-select level-transformation-factor" data-level="senior-management">
+                                        <option value="-0.2">-0.2 (Significant Job Consolidation)</option>
+                                        <option value="-0.1">-0.1 (Moderate Job Reduction)</option>
+                                        <option value="0" selected>0 (No Significant Change)</option>
+                                        <option value="0.1">0.1 (Moderate Job Creation)</option>
+                                        <option value="0.2">0.2 (Significant Digital Transformation)</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>Retention Factor</strong></td>
+                                <td>
+                                    <select class="form-select level-retention-factor" data-level="senior-management">
+                                        <option value="0.7">0.7 (High Turnover)</option>
+                                        <option value="0.8">0.8 (Above Average Turnover)</option>
+                                        <option value="0.9">0.9 (Moderate Turnover)</option>
+                                        <option value="1.0" selected>1.0 (Normal Retention)</option>
+                                        <option value="1.1">1.1 (Good Retention)</option>
+                                        <option value="1.2">1.2 (Excellent Retention)</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>Skills Factor</strong></td>
+                                <td>
+                                    <select class="form-select level-skills-factor" data-level="senior-management">
+                                        <option value="0.8">0.8 (Significant Gap)</option>
+                                        <option value="0.9">0.9 (Moderate Gap)</option>
+                                        <option value="1.0" selected>1.0 (Balanced)</option>
+                                        <option value="1.1">1.1 (Good Availability)</option>
+                                        <option value="1.2">1.2 (Strong Availability)</option>
+                                    </select>
+                                </td>
+                            </tr>
                         </table>
                     </div>
                 </div>
             </div>
 
             <!-- Middle Management -->
-            <!-- Copy the entire card structure from Top Management -->
-            <!-- Change all data-level attributes to "middle-management" -->
+            <div class="col-md-6 mb-4">
+                <div class="card">
+                    <div class="card-header bg-dark text-white">
+                        <h3 class="card-title mb-0">Middle Management</h3>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-bordered">
+                            <tr>
+                                <td width="50%"><strong>Current Headcount</strong></td>
+                                <td><input type="number" class="form-control headcount-input" data-level="middle-management" min="0"></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Economic Factor</strong></td>
+                                <td>
+                                    <select class="form-select level-economic-factor" data-level="middle-management">
+                                        <option value="-0.3">-0.3 (Severe Downturn)</option>
+                                        <option value="-0.2">-0.2 (Significant Decline)</option>
+                                        <option value="-0.1">-0.1 (Moderate Decline)</option>
+                                        <option value="0" selected>0 (Stable)</option>
+                                        <option value="0.1">0.1 (Moderate Growth)</option>
+                                        <option value="0.2">0.2 (Significant Growth)</option>
+                                        <option value="0.3">0.3 (Rapid Growth)</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>Automation Impact</strong></td>
+                                <td>
+                                    <select class="form-select level-automation-factor" data-level="middle-management">
+                                        <option value="-0.2">-0.2 (High Impact)</option>
+                                        <option value="-0.1">-0.1 (Moderate Impact)</option>
+                                        <option value="0" selected>0 (Neutral)</option>
+                                        <option value="0.1">0.1 (Positive Impact)</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>Work Transformation</strong></td>
+                                <td>
+                                    <select class="form-select level-transformation-factor" data-level="middle-management">
+                                        <option value="-0.2">-0.2 (Significant Job Consolidation)</option>
+                                        <option value="-0.1">-0.1 (Moderate Job Reduction)</option>
+                                        <option value="0" selected>0 (No Significant Change)</option>
+                                        <option value="0.1">0.1 (Moderate Job Creation)</option>
+                                        <option value="0.2">0.2 (Significant Digital Transformation)</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>Retention Factor</strong></td>
+                                <td>
+                                    <select class="form-select level-retention-factor" data-level="middle-management">
+                                        <option value="0.7">0.7 (High Turnover)</option>
+                                        <option value="0.8">0.8 (Above Average Turnover)</option>
+                                        <option value="0.9">0.9 (Moderate Turnover)</option>
+                                        <option value="1.0" selected>1.0 (Normal Retention)</option>
+                                        <option value="1.1">1.1 (Good Retention)</option>
+                                        <option value="1.2">1.2 (Excellent Retention)</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>Skills Factor</strong></td>
+                                <td>
+                                    <select class="form-select level-skills-factor" data-level="middle-management">
+                                        <option value="0.8">0.8 (Significant Gap)</option>
+                                        <option value="0.9">0.9 (Moderate Gap)</option>
+                                        <option value="1.0" selected>1.0 (Balanced)</option>
+                                        <option value="1.1">1.1 (Good Availability)</option>
+                                        <option value="1.2">1.2 (Strong Availability)</option>
+                                    </select>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
 
             <!-- Junior Management -->
-            <!-- Copy the entire card structure from Top Management -->
-            <!-- Change all data-level attributes to "junior-management" -->
+            <div class="col-md-6 mb-4">
+                <div class="card">
+                    <div class="card-header bg-dark text-white">
+                        <h3 class="card-title mb-0">Junior Management</h3>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-bordered"><table class="table table-bordered">
+                            <tr>
+                                <td width="50%"><strong>Current Headcount</strong></td>
+                                <td><input type="number" class="form-control headcount-input" data-level="junior-management" min="0"></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Economic Factor</strong></td>
+                                <td>
+                                    <select class="form-select level-economic-factor" data-level="junior-management">
+                                        <option value="-0.3">-0.3 (Severe Downturn)</option>
+                                        <option value="-0.2">-0.2 (Significant Decline)</option>
+                                        <option value="-0.1">-0.1 (Moderate Decline)</option>
+                                        <option value="0" selected>0 (Stable)</option>
+                                        <option value="0.1">0.1 (Moderate Growth)</option>
+                                        <option value="0.2">0.2 (Significant Growth)</option>
+                                        <option value="0.3">0.3 (Rapid Growth)</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>Automation Impact</strong></td>
+                                <td>
+                                    <select class="form-select level-automation-factor" data-level="junior-management">
+                                        <option value="-0.2">-0.2 (High Impact)</option>
+                                        <option value="-0.1">-0.1 (Moderate Impact)</option>
+                                        <option value="0" selected>0 (Neutral)</option>
+                                        <option value="0.1">0.1 (Positive Impact)</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>Work Transformation</strong></td>
+                                <td>
+                                    <select class="form-select level-transformation-factor" data-level="junior-management">
+                                        <option value="-0.2">-0.2 (Significant Job Consolidation)</option>
+                                        <option value="-0.1">-0.1 (Moderate Job Reduction)</option>
+                                        <option value="0" selected>0 (No Significant Change)</option>
+                                        <option value="0.1">0.1 (Moderate Job Creation)</option>
+                                        <option value="0.2">0.2 (Significant Digital Transformation)</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>Retention Factor</strong></td>
+                                <td>
+                                    <select class="form-select level-retention-factor" data-level="junior-management">
+                                        <option value="0.7">0.7 (High Turnover)</option>
+                                        <option value="0.8">0.8 (Above Average Turnover)</option>
+                                        <option value="0.9">0.9 (Moderate Turnover)</option>
+                                        <option value="1.0" selected>1.0 (Normal Retention)</option>
+                                        <option value="1.1">1.1 (Good Retention)</option>
+                                        <option value="1.2">1.2 (Excellent Retention)</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>Skills Factor</strong></td>
+                                <td>
+                                    <select class="form-select level-skills-factor" data-level="junior-management">
+                                        <option value="0.8">0.8 (Significant Gap)</option>
+                                        <option value="0.9">0.9 (Moderate Gap)</option>
+                                        <option value="1.0" selected>1.0 (Balanced)</option>
+                                        <option value="1.1">1.1 (Good Availability)</option>
+                                        <option value="1.2">1.2 (Strong Availability)</option>
+                                    </select>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
 
             <!-- Semi-skilled Labor -->
-            <!-- Copy the entire card structure from Top Management -->
-            <!-- Change all data-level attributes to "semi-skilled" -->
+            <div class="col-md-6 mb-4">
+                <div class="card">
+                    <div class="card-header bg-dark text-white">
+                        <h3 class="card-title mb-0">Semi-skilled Labor</h3>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-bordered">
+                            <tr>
+                                <td width="50%"><strong>Current Headcount</strong></td>
+                                <td><input type="number" class="form-control headcount-input" data-level="semi-skilled" min="0"></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Economic Factor</strong></td>
+                                <td>
+                                    <select class="form-select level-economic-factor" data-level="semi-skilled">
+                                        <option value="-0.3">-0.3 (Severe Downturn)</option>
+                                        <option value="-0.2">-0.2 (Significant Decline)</option>
+                                        <option value="-0.1">-0.1 (Moderate Decline)</option>
+                                        <option value="0" selected>0 (Stable)</option>
+                                        <option value="0.1">0.1 (Moderate Growth)</option>
+                                        <option value="0.2">0.2 (Significant Growth)</option>
+                                        <option value="0.3">0.3 (Rapid Growth)</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>Automation Impact</strong></td>
+                                <td>
+                                    <select class="form-select level-automation-factor" data-level="semi-skilled">
+                                        <option value="-0.2">-0.2 (High Impact)</option>
+                                        <option value="-0.1">-0.1 (Moderate Impact)</option>
+                                        <option value="0" selected>0 (Neutral)</option>
+                                        <option value="0.1">0.1 (Positive Impact)</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>Work Transformation</strong></td>
+                                <td>
+                                    <select class="form-select level-transformation-factor" data-level="semi-skilled">
+                                        <option value="-0.2">-0.2 (Significant Job Consolidation)</option>
+                                        <option value="-0.1">-0.1 (Moderate Job Reduction)</option>
+                                        <option value="0" selected>0 (No Significant Change)</option>
+                                        <option value="0.1">0.1 (Moderate Job Creation)</option>
+                                        <option value="0.2">0.2 (Significant Digital Transformation)</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>Retention Factor</strong></td>
+                                <td>
+                                    <select class="form-select level-retention-factor" data-level="semi-skilled">
+                                        <option value="0.7">0.7 (High Turnover)</option>
+                                        <option value="0.8">0.8 (Above Average Turnover)</option>
+                                        <option value="0.9">0.9 (Moderate Turnover)</option>
+                                        <option value="1.0" selected>1.0 (Normal Retention)</option>
+                                        <option value="1.1">1.1 (Good Retention)</option>
+                                        <option value="1.2">1.2 (Excellent Retention)</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>Skills Factor</strong></td>
+                                <td>
+                                    <select class="form-select level-skills-factor" data-level="semi-skilled">
+                                        <option value="0.8">0.8 (Significant Gap)</option>
+                                        <option value="0.9">0.9 (Moderate Gap)</option>
+                                        <option value="1.0" selected>1.0 (Balanced)</option>
+                                        <option value="1.1">1.1 (Good Availability)</option>
+                                        <option value="1.2">1.2 (Strong Availability)</option>
+                                    </select>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
 
             <!-- Unskilled Labor -->
-            <!-- Copy the entire card structure from Top Management -->
-            <!-- Change all data-level attributes to "unskilled" -->
+            <div class="col-md-6 mb-4">
+                <div class="card">
+                    <div class="card-header bg-dark text-white">
+                        <h3 class="card-title mb-0">Unskilled Labor</h3>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-bordered">
+                            <tr>
+                                <td width="50%"><strong>Current Headcount</strong></td>
+                                <td><input type="number" class="form-control headcount-input" data-level="unskilled" min="0"></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Economic Factor</strong></td>
+                                <td>
+                                    <select class="form-select level-economic-factor" data-level="unskilled">
+                                        <option value="-0.3">-0.3 (Severe Downturn)</option>
+                                        <option value="-0.2">-0.2 (Significant Decline)</option>
+                                        <option value="-0.1">-0.1 (Moderate Decline)</option>
+                                        <option value="0" selected>0 (Stable)</option>
+                                        <option value="0.1">0.1 (Moderate Growth)</option>
+                                        <option value="0.2">0.2 (Significant Growth)</option>
+                                        <option value="0.3">0.3 (Rapid Growth)</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>Automation Impact</strong></td>
+                                <td>
+                                    <select class="form-select level-automation-factor" data-level="unskilled">
+                                        <option value="-0.2">-0.2 (High Impact)</option>
+                                        <option value="-0.1">-0.1 (Moderate Impact)</option>
+                                        <option value="0" selected>0 (Neutral)</option>
+                                        <option value="0.1">0.1 (Positive Impact)</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>Work Transformation</strong></td>
+                                <td>
+                                    <select class="form-select level-transformation-factor" data-level="unskilled">
+                                        <option value="-0.2">-0.2 (Significant Job Consolidation)</option>
+                                        <option value="-0.1">-0.1 (Moderate Job Reduction)</option>
+                                        <option value="0" selected>0 (No Significant Change)</option>
+                                        <option value="0.1">0.1 (Moderate Job Creation)</option>
+                                        <option value="0.2">0.2 (Significant Digital Transformation)</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>Retention Factor</strong></td>
+                                <td>
+                                    <select class="form-select level-retention-factor" data-level="unskilled">
+                                        <option value="0.7">0.7 (High Turnover)</option>
+                                        <option value="0.8">0.8 (Above Average Turnover)</option>
+                                        <option value="0.9">0.9 (Moderate Turnover)</option>
+                                        <option value="1.0" selected>1.0 (Normal Retention)</option>
+                                        <option value="1.1">1.1 (Good Retention)</option>
+                                        <option value="1.2">1.2 (Excellent Retention)</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>Skills Factor</strong></td>
+                                <td>
+                                    <select class="form-select level-skills-factor" data-level="unskilled">
+                                        <option value="0.8">0.8 (Significant Gap)</option>
+                                        <option value="0.9">0.9 (Moderate Gap)</option>
+                                        <option value="1.0" selected>1.0 (Balanced)</option>
+                                        <option value="1.1">1.1 (Good Availability)</option>
+                                        <option value="1.2">1.2 (Strong Availability)</option>
+                                    </select>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- Action Buttons -->
@@ -194,9 +540,9 @@
             <div class="col text-center">
                 <p class="mb-0">
                     <strong>Workforce Forecasting Tool</strong> | 
-                    Predictive Analytics for Strategic Workforce Planning
+                    PredictivePredictive Analytics for Strategic Workforce Planning
                 </p>
-                <small class="text-muted">© 2024 Global Business Solutions</small>
+                <small class="text-muted">© 2024 Workforce Insights</small>
             </div>
         </footer>
     </div>
